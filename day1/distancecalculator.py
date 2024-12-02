@@ -1,10 +1,9 @@
 import os
 from collections import Counter
 
-directory = "/Users/victorciobanu/Documents/Programming/advent-of-code-2024/day1"
-os.chdir(directory)
 
-file_path = 'input_lists.md'
+current_directory = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(current_directory, 'input_lists.md')
 
 with open(file_path, 'r', encoding='utf-8') as file:
     stringlists = file.read()
