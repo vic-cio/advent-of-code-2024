@@ -1,7 +1,7 @@
 import os
 from collections import Counter
 
-directory = "/Users/victorciobanu/Documents/Programming/advent-of-code-2024/Day 1"
+directory = "/Users/victorciobanu/Documents/Programming/advent-of-code-2024/day1"
 os.chdir(directory)
 
 file_path = 'input_lists.md'
