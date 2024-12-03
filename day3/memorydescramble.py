@@ -14,4 +14,3 @@ found_functions = re.findall(pattern, scrambled_string)
 mul = lambda x,y: int(x) * int(y)
 running_total = sum([eval(func) for func in found_functions])
 print(running_total)
-
