@@ -4,4 +4,4 @@ current_directory = Path(__file__).parent # Get the directory of the running pyt
 file_path = current_directory / 'calibrationvalues.txt' # Join the directory with the file name
 calibration_str = file_path.read_text()
 
-print(calibration_str)
+print(calibration_str) 
