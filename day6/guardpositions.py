@@ -11,12 +11,12 @@ def findguard(grid):  # Get the guard's position and orientation
     for y, row in enumerate(grid):
         for x, cell in enumerate(row):
             if cell in "^v<>":
-                print ("Guard found:", x, y, cell)
+                # print ("Guard found:", x, y, cell)
                 return (x, y, cell)
 
 """takes coords and grid parameters"""
 def inbound(x, y, length, height):  
-    print("Inbound? (", x , y, ")", "(", length, height, ")")
+    # print("Inbound? (", x , y, ")", "(", length, height, ")")
     return 0 <= x < length and 0 <= y < height
 
 def next_pos_and_direction(x, y, direction):
@@ -44,10 +44,9 @@ def path_finder(grid):
     active_grid[current_state[1]][current_state[0]] = "X"
 
     distinct_points = {current_state[:2]}
-    print(distinct_points)
     distinct_states = {current_state}
-    print(distinct_states)
-    print(len(distinct_points))
+    # print(distinct_states)
+    # print(len(distinct_points))
 
     # distinct_states.add((4, 7, "^"))
     # if (4, 7, "^") in distinct_states:
@@ -55,13 +54,13 @@ def path_finder(grid):
 
     moves = 0
     while moves < 15000:
-        print("Move:", moves)
+        # print("Move:", moves)
         next_state = next_pos_and_direction(current_state[0], current_state[1], current_state[2])
-        print("trying next state:", next_state)
+        # print("trying next state:", next_state)
 
         if inbound(next_state[0], next_state[1], x_len, y_len):
             next_cell = active_grid[next_state[1]][next_state[0]]
-            print("next cell:", next_cell)
+            # print("next cell:", next_cell)
         else:
             print("Out of bounds")
             return len(distinct_points), distinct_points
@@ -71,16 +70,15 @@ def path_finder(grid):
             return 0, set()
         
         elif next_cell == "#":
-            print("Obstacle detected")
+            # print("Obstacle detected")
             next_state = (current_state[0], current_state[1],
                              orientations[(orientations.index(current_state[2]) + 1) % len(orientations)])
     
         elif next_cell == "X":
-            print("Visited cell")
+            pass
 
         elif next_cell == ".":
             active_grid[next_state[1]][next_state[0]] = "X"
-            print("New cell")
 
         else:
             return ("case not found"), distinct_points
@@ -93,31 +91,60 @@ def path_finder(grid):
 
     return ("out of moves"), distinct_points
 
+"""Try inserting an object on the path to see if it loops back to the guard"""
+def loop_finder(grid, path):
+    modified_grid = [list(row) for row in grid]
+    potential_obstructions = path # Exclude the guard and the last out of bounds point
+    loops = 0
+
+    counter = 0
+    path_length = len(path)
+
+    for obstruction in potential_obstructions:
+        print("check", counter, "of", path_length)
+        if not modified_grid[obstruction[1]][obstruction[0]] in "#^>v<":
+            modified_grid[obstruction[1]][obstruction[0]] = "#"
+            if path_finder(modified_grid)[0] == 0:
+                loops += 1
+            modified_grid[obstruction[1]][obstruction[0]] = "." # Reset the grid to its original state
+        counter += 1
+
+    return loops
+
+unique_pos = path_finder(lab_grid)[0]
+path = path_finder(lab_grid)[1]
+loops = loop_finder(lab_grid, path)
+
+print(unique_pos)
+print(loops)
 
 
 
+# # Test case
+# test_grid_string = """....#.....
+# .........#
+# ..........
+# ..#.......
+# .......#..
+# ..........
+# .#..^.....
+# ........#.
+# #.........
+# ......#..."""
 
-# Test case
-test_grid_string = """....#.....
-.........#
-..........
-..#.......
-.......#..
-..........
-.#..^.....
-........#.
-#.........
-......#..."""
+# test_2 = """.#..
+# .^.#
+# #...
+# ..#."""
 
-test_2 = """.#..
-.^.#
-#...
-..#."""
+# test_grid = [[char for char in row] for row in test_grid_string.split('\n')] #find path
+# test_grid_2 = [[char for char in row] for row in test_2.split('\n')] #find loop
 
-test_grid = [[char for char in row] for row in test_grid_string.split('\n')] #find path
-test_grid_2 = [[char for char in row] for row in test_2.split('\n')] #find loop
+# test_unique_pos = path_finder(test_grid)[0]
+# test_path = path_finder(test_grid)[1]
+# test_loops = loop_finder(test_grid, test_path)
 
-print(path_finder(test_grid))
-print(path_finder(test_grid_2))
-print(path_finder(lab_grid)) #find path
+# print(test_unique_pos)
+# print(test_path)
+# print(test_loops)
 
