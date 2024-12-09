@@ -20,7 +20,7 @@ calibration_values = [[int(targ), [int(x) for x in comp.strip().split()]] for ta
 
 def generate_operator_combinations(components):
     operator_count = len(components) - 1
-    operators = ['+', '*']
+    operators = ['+', '*', '||']
     operator_combinations = list(product(operators, repeat=operator_count))
     return operator_combinations
 
@@ -45,7 +45,7 @@ def is_possible_value(target, components):
         return 0
     
     operator_combinations = generate_operator_combinations(components)
-    operator_map = {'+': lambda x, y: x + y, '*': lambda x, y: x * y,}
+    operator_map = {'+': lambda x, y: x + y, '*': lambda x, y: x * y, '||': lambda x, y: int(str(x) + str(y))}
 
     for op_comb in operator_combinations:
         running_total = components[0]
@@ -85,4 +85,4 @@ sum_values = 0
 for input in calibration_values:
     sum_values += is_possible_value(input[0], input[1])
 
-print(sum_values) # 14522484
+print(sum_values)
